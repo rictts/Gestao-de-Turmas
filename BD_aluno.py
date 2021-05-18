@@ -7,18 +7,18 @@ dbName = "Turmas.db"
 global conn
 conn = sqlite3.connect(dbName)
 
-def insert_aluno(Numero_aluno, Nome_aluno):
+def insert_aluno(lista_aluno):
 
-    print("Base de dados: ",Numero_aluno)
-    print("Base de dados: ",Nome_aluno)
+    print("BD Aluno-Numero : ",lista_aluno[0])
+    print("BD Aluno-Nome : ",lista_aluno[1])
 
-    sql = """INSERT INTO aluno(Numero_aluno, Nome_aluno, Morada_aluno, Idade_aluno, CC_aluno)
+    sql = """INSERT INTO aluno(id_aluno, Nome_Aluno, Morada_Aluno, CC_Aluno, Idade_Aluno)
           VALUES (?,?,"",0,0);
           """
     c = conn.cursor()
 
-    dados = (Numero_aluno, Nome_aluno)
-    c.execute(sql, (dados,))
+    dados = (lista_aluno[0], lista_aluno[1])
+    c.execute(sql, dados)
 
     conn.commit()
 

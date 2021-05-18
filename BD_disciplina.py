@@ -9,7 +9,7 @@ conn = sqlite3.connect(dbName)
 
 def insert_disciplina(disciplina):
 
-    print("Base de dados",disciplina)
+    print("Insere na Base de dados:",disciplina)
 
     sql = """INSERT INTO disciplina(Nome_Disciplina) VALUES (?);"""
     c = conn.cursor()
@@ -19,6 +19,15 @@ def insert_disciplina(disciplina):
 
     conn.commit()
 
+def select_disciplina():
+
+    print("Selecciona os dados da tabela disciplina")
+
+    sql = """SELECT * FROM disciplina;"""
+    c = conn.cursor()
+    c.execute(sql)
+    
+    conn.commit()
 
 
 
