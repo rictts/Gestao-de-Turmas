@@ -8,7 +8,7 @@ class alunos_inscritos():
         self.Nome_Disciplina = Nome_Disciplina
         pass
     
-    def mostrar_alunos_inscritos(self):
-        print(self.Numero_aluno)
-        #print(self.Nome_Disciplina)
+    def mostrar_alunos_inscritos(self,disciplina):
+        if self.Nome_Disciplina == disciplina:
+            print(self.Numero_aluno)
         pass
