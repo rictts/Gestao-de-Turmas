@@ -1,12 +1,12 @@
 # Cliente
 import socket
-
+import conf_conexao
 
 class mysocket:
-
     def _init_(self)
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+        host='127.0.0.1'
+        porto=50000
         server_address=(host,porto)
 
     def connet(self, server_address)

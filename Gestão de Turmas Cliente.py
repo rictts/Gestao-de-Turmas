@@ -1,16 +1,22 @@
 import socket
+import os
 
-# Componente Cliente - MAIN
 
 
-#Estabelece a ligação ao servidor
+# ***************** Componente Cliente - MAIN ************************
+
+
+# Define a ligação ao servidor
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host='127.0.0.1'
-porto=50000
-#host = "192.168.1.125"
-#porto = 5525
-server_address=(host,porto)
 
+# lê do ficheiro de configuração o IP do servidor
+f = open("conexao_conf.txt", "r")
+for linha in f:
+    valores= linha.split()
+    host = valores[0]
+f.close()
+porto=50000
+server_address=(host,porto)
 s.connect(server_address)
 
 #Define as listas e outras variaveis
@@ -59,18 +65,23 @@ import class_Aluno
 import class_alunos_inscritos
 
 def criarAluno():
+    lista_aluno_aux = list()
+    
     Numero_aluno = int(input("Inserir o numero do aluno: "))
     Nome_aluno = input("Inserir o nome do aluno: ")
     Morada_aluno = input("Inserir a morada do aluno: ")
     Idade_aluno = int(input("Inserir a idade do aluno: "))
     CC_aluno = int(input("Inserir o cartao de cidadao do aluno: "))
-    s.send(str.encode("4"))
-    string = str(Numero_aluno)
-    s.send(str.encode(string))
-    s.send(str.encode(Nome_aluno))
-        
+       
     Novo_Aluno = class_Aluno.aluno(Numero_aluno, Nome_aluno, Morada_aluno, Idade_aluno, CC_aluno )
     lista_alunos.append(Novo_Aluno)
+
+    lista_aluno_aux.append(Numero_aluno)
+    lista_aluno_aux.append(Nome_aluno)
+    
+    string = str(lista_aluno_aux)
+    s.send(str.encode("4"))
+    s.send(str.encode(string))
     pass
 
 def listarAluno():
@@ -80,6 +91,8 @@ def listarAluno():
     pass
 
 def inscreverAluno():
+    lista_inscrever_aux = list()
+    
     listarDisciplina()
     disc_inscrita = input("Escolha o nome da disciplina onde quer inscrever o aluno: ")
     listarAluno()
@@ -87,16 +100,27 @@ def inscreverAluno():
 
     Novo_aluno_inscrito = class_alunos_inscritos.alunos_inscritos(aluno_inscrito, disc_inscrita)
     lista_alunos_inscritos.append(Novo_aluno_inscrito)
+
+    lista_inscrever_aux.append(aluno_inscrito)
+    lista_inscrever_aux.append(disc_inscrita)
+    
+    string = str(lista_inscrever_aux)
+    s.send(str.encode("5"))
+    s.send(str.encode(string))
+    
     pass
 
 def eliminarAluno():
     listarAluno()
-    escolha = int(input("Elimina um aluno: "))
-    escolha = escolha - 1
+    try:
+        escolha = int(input("Indique o numero do aluno a eliminar: "))
+        escolha = escolha - 1
+    except:
+        print("Ocorreu um erro, tente novamente. Verifique se introduziu corretamente os dados")
     try:
         lista_alunos.pop(escolha)
     except:
-        print("Ocorreu um erro.")
+        print("Ocorreu um erro ao eliminar o aluno da lista")
     pass
 
 def listarAlunoDisciplina():
@@ -105,7 +129,7 @@ def listarAlunoDisciplina():
 
     print ("Os alunos inscritos são:")
     for cada_aluno_inscrito in lista_alunos_inscritos:
-        cada_aluno_inscrito.mostrar_alunos_inscritos()
+        cada_aluno_inscrito.mostrar_alunos_inscritos(escolha)
     pass
 
 # *********** Funções da professor  ************
@@ -114,19 +138,25 @@ import class_Professor
 import class_professor_disciplina
 
 def criarProfessor():
+    lista_prof_aux = list()
+
     Numero_professor = int(input("Inserir o numero do professor: "))
     Nome_professor = input("Inserir o nome do professor: ")
     Morada_professor = input("Inserir a morada do professor: ")
     Idade_professor = int(input("Inserir a idade do professor: "))
     Categoria_profissional = input("Inserira a categoria profissional: ")
     Anos_experiencia = int(input("Inserir anos de experiencia do professor: "))
-    s.send(str.encode("9"))
-    string = str(Numero_professor)
-    s.send(str.encode(string))
-    s.send(str.encode(Nome_professor))
+
 
     Novo_Professor = class_Professor.professor(Numero_professor, Nome_professor, Morada_professor, Idade_professor, Categoria_profissional, Anos_experiencia)
     lista_professores.append(Novo_Professor)
+
+
+    lista_prof_aux.append(Numero_professor)
+    lista_prof_aux.append(Nome_professor)
+    string = str(lista_prof_aux)
+    s.send(str.encode("9"))
+    s.send(str.encode(string))
     pass
 
 def listarProfessor():
@@ -136,6 +166,8 @@ def listarProfessor():
     pass
 
 def adicionarProfessorDisciplina():
+    lista_assoc_aux = list()
+
     listarDisciplina()
     escolha_disc = input("Escolha o nome da Disciplina que quer adicionar o professor: ")
 
@@ -144,6 +176,13 @@ def adicionarProfessorDisciplina():
     
     Novo_professor_disciplina = class_professor_disciplina.professor_disciplina(escolha_prof, escolha_disc)
     lista_professores_disciplina.append(Novo_professor_disciplina)
+
+    lista_assoc_aux.append(escolha_prof)
+    lista_assoc_aux.append(escolha_disc)
+    string = str(lista_assoc_aux)
+    s.send(str.encode("10"))
+    s.send(str.encode(string))
+    
     pass  
   
 def ImportarFicheiroAlunos():
@@ -160,7 +199,19 @@ def ImportarFicheiroAlunos():
 
 # *** Acede ao servidor e carrega as listas
 
+s.send(str.encode("start"))
+#recebe as listas    ----  s.recv(listas)
+#Copia ou adiciona todas as listas
+#lista_alunos
+#lista_professores 
+#lista_disciplinas 
+#lista_alunos_inscritos 
+#lista_professores_disciplina 
+#
+
+
 # *** Escreve o menu e recebe a opção escolhida pelo utilizador ***
+os.system("cls")
 while escolha !=0:
                       
               print("1 - Criar Disciplina")
