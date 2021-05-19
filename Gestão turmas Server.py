@@ -1,4 +1,3 @@
-
 # Componente Servidor - MAIN
 
 #importa o modulo com funções da tabela disciplina
@@ -45,20 +44,56 @@ while True:
             c.close()
             break
     #START - Acede às tabelas e carrega as listas
- #   if msg.decode() == 'start':
- #       select_disciplina()
- #       select_aluno()
- #       select_professor()
- #       select_associa_aluno()
- #       select_associa_professor()
+    if msg.decode() == 'start':
+        #No arranque da aplicação cliente envia para o cliente os dados da tabela aluno
+         lista_aluno = list()
+         lista_aluno = BD_aluno.select_aluno()
+         string = str(lista_aluno)
+         c.send(str.encode(string))
+        #No arranque da aplicação cliente envia para o cliente os dados da tabela disciplina
+         lista_disciplina = list()
+         lista_disciplina = BD_disciplina.select_disciplina()
+         string = str(lista_disciplina)
+         c.send(str.encode(string))
+        #No arranque da aplicação cliente envia para o cliente os dados da tabela professor
+         lista_professor = list()
+         lista_professor = BD_professor.select_professor()
+         string = str(lista_professor)
+         c.send(str.encode(string))
+         
+         #No arranque da aplicação cliente envia para o cliente os dados da tabela associa aluno
+         lista_associa_aluno = list()
+         lista_associa_aluno = BD_associa_aluno.select_associa_aluno()
+         string = str(lista_associa_aluno)
+         c.send(str.encode(string))
+
+         #No arranque da aplicação cliente envia para o cliente os dados da tabela associa professor
+         lista_associa_professor = list()
+         lista_associa_professor = BD_associa_professor.select_associa_professor()
+         string = str(lista_associa_professor)
+         c.send(str.encode(string))
         
     
     #Opção 1 - Criar Disciplina
-    if msg.decode() == '1':
+    elif msg.decode() == '1':
         print("Opção1-Criar Disciplina")
         msg = c.recv(1024)
+        #try:
         BD_disciplina.insert_disciplina(msg.decode())
-        
+            #s.send(str.encode("OK"))
+        #except:
+            #s.send(str.encode("ERRO"))
+            
+    #Opção 3 - Eliminar Disciplina
+    elif msg.decode() == '3':
+        print("Opção3-Eliminar Disciplina")
+        msg = c.recv(1024)
+        #try:
+        BD_disciplina.delete_disciplina(msg.decode())
+            #s.send(str.encode("OK"))
+        #except:
+            #s.send(str.encode("ERRO"))
+            
     #Opção 4 - Criar Aluno
     elif msg.decode() == '4':
         print("Opção4-Criar Aluno")
@@ -72,6 +107,17 @@ while True:
         msg = c.recv(1024)
         msg =eval(msg)
         BD_associa_aluno.insert_associa_aluno(msg)
+
+    #Opção 6 - Eliminar Aluno
+    elif msg.decode() == '6':
+        print("Opção6-Eliminar Aluno")
+        msg = c.recv(1024)
+        #try:
+        BD_aluno.delete_aluno(msg.decode())
+        BD_associa_aluno.delete_associa_aluno(msg.decode())
+            #s.send(str.encode("OK"))
+        #except:
+            #s.send(str.encode("ERRO"))
 
       
     #Opção 9 - Criar Professor
