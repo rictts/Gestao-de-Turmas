@@ -22,7 +22,17 @@ def insert_associa_professor(lista_associa_professor):
 
     conn.commit()
 
+def select_associa_professor():
 
+    lista_associa_professor = list()
+    print("BD Associa Professor-Select ")
+
+    sql = """SELECT * from associa_professor_disciplina;"""
+    c = conn.cursor()
+    resultado = c.execute(sql)
+    for linha in resultado:
+        lista_associa_professor.append(linha)
+    return lista_associa_professor
 
 
 

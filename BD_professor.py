@@ -22,7 +22,17 @@ def insert_professor(lista_professor):
 
     conn.commit()
 
+def select_professor():
 
+    lista_professor = list()
+    print("BD Professor-Select ")
+
+    sql = """SELECT * from professor;"""
+    c = conn.cursor()
+    resultado = c.execute(sql)
+    for linha in resultado:
+        lista_professor.append(linha)
+    return lista_professor
 
 
 

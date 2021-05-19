@@ -1,4 +1,3 @@
-
 import os
 import sqlite3
 
@@ -22,9 +21,28 @@ def insert_aluno(lista_aluno):
 
     conn.commit()
 
+def select_aluno():
 
+    lista_aluno = list()
+    print("BD Aluno-Select ")
 
+    sql = """SELECT * from aluno;"""
+    c = conn.cursor()
+    resultado = c.execute(sql)
+    for linha in resultado:
+        lista_aluno.append(linha)
+    return lista_aluno
+    
+def delete_aluno(aluno):
 
+    print("Apaga na Base de dados:",aluno)
 
+    sql = """DELETE FROM aluno WHERE id_aluno = ?;"""
+    c = conn.cursor()
+
+    dados = (aluno)
+    c.execute(sql, (dados,))
+
+    conn.commit()
 
 

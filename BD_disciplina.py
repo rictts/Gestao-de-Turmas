@@ -21,16 +21,27 @@ def insert_disciplina(disciplina):
 
 def select_disciplina():
 
-    print("Selecciona os dados da tabela disciplina")
+    lista_disciplina = list()
+    print("BD Disciplina-Select ")
 
-    sql = """SELECT * FROM disciplina;"""
+    sql = """SELECT * from disciplina;"""
     c = conn.cursor()
-    c.execute(sql)
-    
+    resultado = c.execute(sql)
+    for linha in resultado:
+        lista_disciplina.append(linha)
+    return lista_disciplina
+
+def delete_disciplina(disciplina):
+
+    print("Apaga na Base de dados:",disciplina)
+
+    sql = """DELETE FROM disciplina WHERE Nome_Disciplina = ?;"""
+    c = conn.cursor()
+
+    dados = (disciplina)
+    c.execute(sql, (dados,))
+
     conn.commit()
-
-
-
 
 
 
