@@ -19,8 +19,7 @@ class professor():
         pass
     
     def mostrarProfessor(self):
-        print(self.Numero_professor)
-        print(self.Nome_professor)
+        print(self.Numero_professor, "-", self.Nome_professor)
         pass
     
 

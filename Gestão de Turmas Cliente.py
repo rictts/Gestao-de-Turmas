@@ -1,10 +1,6 @@
+# ***************** Componente Cliente - MAIN ************************
 import socket
 import os
-
-
-
-# ***************** Componente Cliente - MAIN ************************
-
 
 # Define a ligação ao servidor
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,8 +13,10 @@ for linha in f:
 f.close()
 porto=50000
 server_address=(host,porto)
-s.connect(server_address)
-
+try:
+    s.connect(server_address)
+except:
+    print("Não foi possivel estabelecer ligação ao servidor")
 #Define as listas e outras variaveis
 escolha = 100
 lista_alunos = list()
@@ -37,9 +35,12 @@ def criarDisciplina():
 
     s.send(str.encode("1"))
     s.send(str.encode(Nome_disciplina))
-
+    #msg = s.recv(1024)
+    #if msg.decode() == "OK":
     Nova_disciplina = class_Disciplina.disciplina(Nome_disciplina)
     lista_disciplinas.append(Nova_disciplina)
+    #else:
+        #print ("Ocorreu um erro a inserir a disciplina. Tente novamente e verifique se a disciplina já existe")
     pass
 
 def listarDisciplina():
@@ -52,11 +53,18 @@ def listarDisciplina():
 
 def eliminarDisciplina():
     listarDisciplina()
-    escolha = int(input("Escolha a Disciplina que quer eliminar: "))
-    try:
-        lista_disciplinas.pop(escolha)
-    except:
-        print("Ocorreu um erro.")
+    escolha = input("Escolha o nome da Disciplina que quer eliminar: ")
+    disc = class_Disciplina.disciplina(escolha)
+    print(disc.Nome_disciplina) 
+    indice=lista_disciplinas.index(disc.Nome_Disciplina)
+    #try:
+    lista_disciplinas.pop(indice)
+    #except:
+        #print("Ocorreu um erro.")
+
+    s.send(str.encode("3"))
+    s.send(str.encode(escolha))
+    listarDisciplina()
     pass
 
 # *********** Funções da aluno  ************
@@ -114,13 +122,19 @@ def eliminarAluno():
     listarAluno()
     try:
         escolha = int(input("Indique o numero do aluno a eliminar: "))
+        string = str(escolha)
         escolha = escolha - 1
     except:
         print("Ocorreu um erro, tente novamente. Verifique se introduziu corretamente os dados")
     try:
         lista_alunos.pop(escolha)
+        lista_alunos_inscritos.pop(escolha)
     except:
         print("Ocorreu um erro ao eliminar o aluno da lista")
+
+    s.send(str.encode("6"))
+    s.send(str.encode(string))
+    
     pass
 
 def listarAlunoDisciplina():
@@ -198,17 +212,42 @@ def ImportarFicheiroAlunos():
     pass
 
 # *** Acede ao servidor e carrega as listas
-
 s.send(str.encode("start"))
-#recebe as listas    ----  s.recv(listas)
-#Copia ou adiciona todas as listas
-#lista_alunos
-#lista_professores 
-#lista_disciplinas 
-#lista_alunos_inscritos 
-#lista_professores_disciplina 
-#
 
+#vai receber o resultado do select da tabela alunos
+msg = s.recv(1024)
+msg = eval(msg)
+for linha in msg:
+    Novo_Aluno = class_Aluno.aluno(linha[0], linha[1], linha[2], linha[3], linha[4])
+    lista_alunos.append(Novo_Aluno)
+
+#vai receber o resultado do select da tabela disciplina
+msg = s.recv(1024)
+msg = eval(msg)
+for linha in msg:
+    Nova_Disciplina = class_Disciplina.disciplina(linha[0])
+    lista_disciplinas.append(Nova_Disciplina)
+
+#vai receber o resultado do select da tabela professor
+msg = s.recv(1024)
+msg = eval(msg)
+for linha in msg:
+    Novo_Professor = class_Professor.professor(linha[0], linha[1], linha[2], linha[3], linha[4], linha[5])
+    lista_professores.append(Novo_Professor)
+
+#vai receber o resultado do select da tabela associa alunos
+msg = s.recv(1024)
+msg = eval(msg)
+for linha in msg:
+    Novo_aluno_inscrito = class_alunos_inscritos.alunos_inscritos(linha[0], linha[1])
+    lista_alunos_inscritos.append(Novo_aluno_inscrito)
+
+#vai receber o resultado do select da tabela professor
+msg = s.recv(1024)
+msg = eval(msg)
+for linha in msg:
+    Novo_professor_disciplina = class_professor_disciplina.professor_disciplina(linha[0], linha[1])
+    lista_professores_disciplina.append(Novo_professor_disciplina)
 
 # *** Escreve o menu e recebe a opção escolhida pelo utilizador ***
 os.system("cls")

@@ -9,6 +9,5 @@ class professor_disciplina():
         pass
     
     def mostrar_professor_disciplina(self):
-        print(self.Numero_professor)
-        print(self.Nome_Disciplina)
+        print(self.Numero_professor, "-", self.Nome_Disciplina)
         pass

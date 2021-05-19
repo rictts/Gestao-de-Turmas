@@ -16,9 +16,7 @@ class aluno():
         pass
     
     def mostrarAluno(self):
-        print(self.Numero_aluno)
-        print(self.Nome_aluno)
+        print(self.Numero_aluno, "-", self.Nome_aluno)
         pass
     
-
 
