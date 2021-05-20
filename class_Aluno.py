@@ -20,3 +20,6 @@ class aluno():
         pass
     
 
+    def devolveAluno(self):
+        return self.Numero_aluno
+        pass

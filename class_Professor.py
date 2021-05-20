@@ -21,6 +21,7 @@ class professor():
     def mostrarProfessor(self):
         print(self.Numero_professor, "-", self.Nome_professor)
         pass
-    
 
-
+    def devolveProfessor(self):
+        return self.Numero_professor
+        pass

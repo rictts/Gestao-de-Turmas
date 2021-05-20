@@ -9,3 +9,6 @@ class disciplina():
     def mostrarNomeDisciplina(self, num):
         print(num, "-", self.Nome_disciplina)
         pass
+    def devolveNomeDisciplina(self):
+        return self.Nome_disciplina
+        pass
