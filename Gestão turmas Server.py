@@ -39,6 +39,7 @@ print("Servidor conectado com",addr)
 #Recebe as mensagens
 while True:
     msg = c.recv(1024)
+    print("msg",msg)
     if not msg:
             print("vou fechar a conexão")
             c.close()
@@ -78,22 +79,14 @@ while True:
     elif msg.decode() == '1':
         print("Opção1-Criar Disciplina")
         msg = c.recv(1024)
-        #try:
         BD_disciplina.insert_disciplina(msg.decode())
-            #s.send(str.encode("OK"))
-        #except:
-            #s.send(str.encode("ERRO"))
             
     #Opção 3 - Eliminar Disciplina
     elif msg.decode() == '3':
         print("Opção3-Eliminar Disciplina")
         msg = c.recv(1024)
-        #try:
         BD_disciplina.delete_disciplina(msg.decode())
-            #s.send(str.encode("OK"))
-        #except:
-            #s.send(str.encode("ERRO"))
-            
+     
     #Opção 4 - Criar Aluno
     elif msg.decode() == '4':
         print("Opção4-Criar Aluno")
@@ -112,14 +105,9 @@ while True:
     elif msg.decode() == '6':
         print("Opção6-Eliminar Aluno")
         msg = c.recv(1024)
-        #try:
         BD_aluno.delete_aluno(msg.decode())
         BD_associa_aluno.delete_associa_aluno(msg.decode())
-            #s.send(str.encode("OK"))
-        #except:
-            #s.send(str.encode("ERRO"))
 
-      
     #Opção 9 - Criar Professor
     elif msg.decode() == '9':
         print("Opção9-Criar Professor")
@@ -132,8 +120,4 @@ while True:
         print("Opção10-Associa Professor")
         msg = c.recv(1024)
         msg =eval(msg)
-        BD_associa_professor.insert_associa_professor(msg)        
-        
-        
-            
-    
+        BD_associa_professor.insert_associa_professor(msg)
