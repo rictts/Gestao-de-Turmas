@@ -16,11 +16,10 @@ def insert_associa_aluno(lista_associa_aluno):
           VALUES (?,?);
           """
     c = conn.cursor()
-
     dados = (lista_associa_aluno[0], lista_associa_aluno[1])
     c.execute(sql, dados)
-
     conn.commit()
+    c.close()
 
 def select_associa_aluno():
 
