@@ -35,6 +35,17 @@ def select_associa_professor():
     return lista_associa_professor
 
 
+def delete_associa_professor_disciplina(disciplina):
+
+    print("Apaga na Base de dados:",disciplina)
+
+    sql = """DELETE FROM associa_professor_disciplina WHERE Nome_Disciplina = ?;"""
+    c = conn.cursor()
+
+    dados = (disciplina)
+    c.execute(sql, (dados,))
+
+    conn.commit()
 
 
 
