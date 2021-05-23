@@ -1,6 +1,7 @@
 # ***************** Componente Cliente - MAIN ************************
 import socket
 import os
+import time
 
 # Define a ligação ao servidor
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -231,30 +232,20 @@ def adicionarProfessorDisciplina():
             disciplina = cada_disciplina.devolveNomeDisciplina()
             if disciplina == escolha_disc:
                 flag = 1
-        if flag == 0:
-            print("Disciplina não existe.")
+        if flag == 1:
+            print("A disciplina que introduziu já existe.")
         else:
-            listarProfessor()
-            escolha_prof = int(input("Escolha o numero do professor que quer adicionar: "))
-            flag = 0
-            for cada_professor in lista_professores:
-                disciplina = cada_disciplina.devolveProfessor()
-                if professor == escolha_prof:
-                    flag = 1
-            if flag == 0:
-                print("Professor não existe.")
-            else:
-                Novo_professor_disciplina = class_professor_disciplina.professor_disciplina(escolha_prof, escolha_disc)
-                lista_professores_disciplina.append(Novo_professor_disciplina)
+            Novo_professor_disciplina = class_professor_disciplina.professor_disciplina(escolha_prof, escolha_disc)
+            lista_professores_disciplina.append(Novo_professor_disciplina)
 
-                lista_assoc_aux.append(escolha_prof)
-                lista_assoc_aux.append(escolha_disc)
-                string = str(lista_assoc_aux)
-                s.send(str.encode("10"))
-                s.send(str.encode(string))
+            lista_assoc_aux.append(escolha_prof)
+            lista_assoc_aux.append(escolha_disc)
+            string = str(lista_assoc_aux)
+            s.send(str.encode("10"))
+            s.send(str.encode(string))
     except:
         print("Ocorreu um erro, verifique se introduziu corretamente o numero do professor")
-    pass  
+    pass
   
 def ImportarFicheiroAlunos():
     lista_aux = list()
@@ -263,29 +254,39 @@ def ImportarFicheiroAlunos():
         f = open(ficheiro, "r")
         listarDisciplina()
         escolha_disc = input("Escolha o nome da Disciplina que quer associar os alunos do ficheiro: ")
-        for linha in f:
-            aluno = int(linha)
-            print(aluno)
+        flag = 0
+        for cada_disciplina in lista_disciplinas:
+            disciplina = cada_disciplina.devolveNomeDisciplina()
+            if disciplina == escolha_disc:
+                flag = 1
+        if flag == 0:
+            print("A disciplina não existe.")
+        else:
+            for linha in f:
+                aluno = int(linha)
+                print(aluno)
 
-            Novo_aluno_inscrito = class_alunos_inscritos.alunos_inscritos(aluno, escolha_disc)
-            lista_alunos_inscritos.append(Novo_aluno_inscrito)
-            
-            lista_aux.clear()
-            lista_aux.append(aluno)
-            lista_aux.append(escolha_disc)
+                Novo_aluno_inscrito = class_alunos_inscritos.alunos_inscritos(aluno, escolha_disc)
+                lista_alunos_inscritos.append(Novo_aluno_inscrito)
                 
-            string = str(lista_aux)
-            s.send(str.encode("5"))
-            print(string)
-            s.send(str.encode(string))
+                lista_aux.clear()
+                lista_aux.append(aluno)
+                lista_aux.append(escolha_disc)
+                    
+                string = str(lista_aux)
+                s.send(str.encode("5"))
+                time.sleep(2)
+                print(string)
+                s.send(str.encode(string))
+                time.sleep(2)
 
-            lista_aux.clear()
-            
-            
+                lista_aux.clear()
+                
+                
         f.close()
     except:
         print("Ocorreu um erro, verifique se introduziu corretamente o nome do ficheiro")
-    pass
+pass
 
 # *** Acede ao servidor e carrega as listas
 s.send(str.encode("start"))
