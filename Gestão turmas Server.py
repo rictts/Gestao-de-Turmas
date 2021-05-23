@@ -27,7 +27,7 @@ server_address =(ip,porto)
 s.bind(server_address)
 
 #o Servidor fica à esculta de receber mensagens
-s.listen()
+s.listen(5)
 print("Servidor à escuta")
 
 #o servidor aceita a conexão
@@ -86,6 +86,8 @@ while True:
         print("Opção3-Eliminar Disciplina")
         msg = c.recv(1024)
         BD_disciplina.delete_disciplina(msg.decode())
+        BD_associa_aluno.delete_associa_aluno_disciplina(msg.decode())
+        BD_associa_professor.delete_associa_professor_disciplina(msg.decode())
      
     #Opção 4 - Criar Aluno
     elif msg.decode() == '4':
