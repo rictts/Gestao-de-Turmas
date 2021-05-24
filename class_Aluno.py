@@ -19,7 +19,7 @@ class aluno():
         print(self.Numero_aluno, "-", self.Nome_aluno)
         pass
     
-
     def devolveAluno(self):
         return self.Numero_aluno
         pass
+    

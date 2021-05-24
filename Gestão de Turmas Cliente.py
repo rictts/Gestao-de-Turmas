@@ -33,12 +33,12 @@ import class_Disciplina
 
 def criarDisciplina():
     Nome_disciplina = input("Inserir o nome da disciplina: ")
-    flag = 0
+    encontrou = 0
     for cada_disciplina in lista_disciplinas:
         disciplina = cada_disciplina.devolveNomeDisciplina()
         if disciplina == Nome_disciplina:
-            flag = 1
-    if flag == 1:
+            encontrou = 1
+    if encontrou == 1:
         print("A disciplina que introduziu já existe.")
     else:
         s.send(str.encode("1"))
@@ -86,12 +86,12 @@ def criarAluno():
     lista_aluno_aux = list()
     try:
         Numero_aluno = int(input("Inserir o numero do aluno: "))
-        flag = 0
+        encontrou = 0
         for cada_aluno in lista_alunos:
             aluno = cada_aluno.devolveAluno()
             if aluno == Numero_aluno:
-                flag = 1
-        if flag == 1:
+                encontrou = 1
+        if encontrou == 1:
             print("O aluno que introduziu já existe.")
         else:
             Nome_aluno = input("Inserir o nome do aluno: ")
@@ -124,23 +124,23 @@ def inscreverAluno():
     try:
         listarDisciplina()
         disc_inscrita = input("Escolha o nome da disciplina onde quer inscrever o aluno: ")
-        flag = 0
+        encontrou = 0
         for cada_disciplina in lista_disciplinas:
             disciplina = cada_disciplina.devolveNomeDisciplina()
             if disciplina == disc_inscrita:
-                flag = 1
-        if flag == 0:
+                encontrou = 1
+        if encontrou == 0:
             print("Disciplina não existe.")
         else:
             listarAluno()
             aluno_inscrito = int(input("Escolha o numero de aluno que quer inscrever: "))
 
-            flag = 0
+            encontrou = 0
             for cada_aluno in lista_alunos:
                 aluno = cada_aluno.devolveAluno()
                 if aluno == aluno_inscrito:
-                    flag = 1
-            if flag == 0:
+                    encontrou = 1
+            if encontrou == 0:
                 print("Aluno não existe.")
             else:
                 Novo_aluno_inscrito = class_alunos_inscritos.alunos_inscritos(aluno_inscrito, disc_inscrita)
@@ -174,11 +174,24 @@ def eliminarAluno():
 
 def listarAlunoDisciplina():
     listarDisciplina()
-    escolha = input("Escolha o nome da Disciplina que quer ver os alunos: ")
-
-    print ("Os alunos inscritos são:")
-    for cada_aluno_inscrito in lista_alunos_inscritos:
-        cada_aluno_inscrito.mostrar_alunos_inscritos(escolha)
+    try:
+        escolha = input("Escolha o nome da Disciplina que quer ver os alunos: ")
+        encontrou = 0
+        for cada_disciplina in lista_disciplinas:
+            disciplina = cada_disciplina.devolveNomeDisciplina()
+            if disciplina == escolha:
+                encontrou = 1
+        if encontrou == 0:
+            print("Disciplina não existe.")
+        else:
+            print ("Os alunos inscritos são:")
+            for cada_aluno_inscrito in lista_alunos_inscritos:
+                aluno = cada_aluno_inscrito.devolve_alunos_inscritos(escolha)
+                for item in lista_alunos:
+                    if item.Numero_aluno == aluno:
+                        item.mostrarAluno()
+    except:
+        print("Ocorreu um erro, verifique se introduziu corretamente os dados")
     pass
 
 # *********** Funções da professor  ************
@@ -190,12 +203,12 @@ def criarProfessor():
     lista_prof_aux = list()
     try:
         Numero_professor = int(input("Inserir o numero do professor: "))
-        flag = 0
+        encontrou = 0
         for cada_professor in lista_professores:
             professor = cada_professor.devolveProfessor()
             if professor == Numero_professor:
-                flag = 1
-        if flag == 1:
+                encontrou = 1
+        if encontrou == 1:
             print("O professor que introduziu já existe.")
         else:
             Nome_professor = input("Inserir o nome do professor: ")
@@ -227,12 +240,12 @@ def adicionarProfessorDisciplina():
     try:
         listarDisciplina()
         escolha_disc = input("Escolha o nome da Disciplina que quer adicionar o professor: ")
-        flag = 0
+        encontrou = 0
         for cada_disciplina in lista_disciplinas:
             disciplina = cada_disciplina.devolveNomeDisciplina()
             if disciplina == escolha_disc:
-                flag = 1
-        if flag == 1:
+                encontrou = 1
+        if encontrou == 1:
             print("A disciplina que introduziu já existe.")
         else:
             Novo_professor_disciplina = class_professor_disciplina.professor_disciplina(escolha_prof, escolha_disc)
@@ -254,12 +267,12 @@ def ImportarFicheiroAlunos():
         f = open(ficheiro, "r")
         listarDisciplina()
         escolha_disc = input("Escolha o nome da Disciplina que quer associar os alunos do ficheiro: ")
-        flag = 0
+        encontrou = 0
         for cada_disciplina in lista_disciplinas:
             disciplina = cada_disciplina.devolveNomeDisciplina()
             if disciplina == escolha_disc:
-                flag = 1
-        if flag == 0:
+                encontrou = 1
+        if encontrou == 0:
             print("A disciplina não existe.")
         else:
             for linha in f:

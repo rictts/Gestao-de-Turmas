@@ -12,3 +12,8 @@ class alunos_inscritos():
         if self.Nome_Disciplina == disciplina:
             print(self.Numero_aluno)
         pass
+    
+    def devolve_alunos_inscritos(self,disciplina):
+        if self.Nome_Disciplina == disciplina:
+            return self.Numero_aluno
+        pass
