@@ -59,7 +59,7 @@ def listarDisciplina():
 def eliminarDisciplina():
     listarDisciplina()
     try:
-        escolha = int(input("Escolha o nome da Disciplina que quer eliminar: "))
+        escolha = int(input("Escolha o numero da Disciplina que quer eliminar: "))
         escolha = escolha - 1
         contador = 0
         for cada_disciplina in lista_disciplinas:
@@ -68,11 +68,13 @@ def eliminarDisciplina():
                 break
             contador = contador + 1
 
-        lista_disciplinas.pop(escolha)
-
-        s.send(str.encode("3"))
-        s.send(str.encode(disciplina))
-        listarDisciplina()
+        if len(lista_disciplinas) != 0:
+            lista_disciplinas.pop(escolha)
+            s.send(str.encode("3"))
+            s.send(str.encode(disciplina))
+            listarDisciplina()
+        else:
+             print ("Lista vazia")  
     except:
         print("Ocorreu um erro, verifique se introduziu um numero válido")
     pass
@@ -160,14 +162,17 @@ def eliminarAluno():
     listarAluno()
     try:
         escolha = int(input("Indique o numero do aluno a eliminar: "))
-        string = str(escolha)
         escolha = escolha - 1
         
-        lista_alunos.pop(escolha)
-        lista_alunos_inscritos.pop(escolha)
-    
-        s.send(str.encode("6"))
-        s.send(str.encode(string))
+        if len(lista_alunos) != 0:
+            lista_alunos.pop(escolha)
+            if len(lista_alunos_inscritos) != 0:
+                lista_alunos_inscritos.pop(escolha)
+            string = str(escolha)
+            s.send(str.encode("6"))
+            s.send(str.encode(string))
+        else:
+            print ("Lista vazia")     
     except:
         print("Ocorreu um erro, verifique se introduziu corretamente os dados")    
     pass
@@ -237,17 +242,27 @@ def listarProfessor():
 
 def adicionarProfessorDisciplina():
     lista_assoc_aux = list()
-    try:
-        listarDisciplina()
-        escolha_disc = input("Escolha o nome da Disciplina que quer adicionar o professor: ")
+    #try:
+    listarDisciplina()
+    escolha_disc = input("Escolha o nome da Disciplina que quer adicionar o professor: ")
+    encontrou = 0
+    for cada_disciplina in lista_disciplinas:
+        disciplina = cada_disciplina.devolveNomeDisciplina()
+        if disciplina == escolha_disc:
+            encontrou = 1
+    if encontrou == 0:
+        print("A disciplina que introduziu não existe.")
+    else:
+        listarProfessor()
+        escolha_prof = int(input("Escolha o numero de professor que quer inscrever: "))
         encontrou = 0
-        for cada_disciplina in lista_disciplinas:
-            disciplina = cada_disciplina.devolveNomeDisciplina()
-            if disciplina == escolha_disc:
+        for cada_prof in lista_professores:
+            prof = cada_prof.devolveProfessor()
+            if prof == escolha_prof:
                 encontrou = 1
-        if encontrou == 1:
-            print("A disciplina que introduziu já existe.")
-        else:
+        if encontrou == 0:
+            print("Professor  não existe.")
+        else:   
             Novo_professor_disciplina = class_professor_disciplina.professor_disciplina(escolha_prof, escolha_disc)
             lista_professores_disciplina.append(Novo_professor_disciplina)
 
@@ -256,8 +271,8 @@ def adicionarProfessorDisciplina():
             string = str(lista_assoc_aux)
             s.send(str.encode("10"))
             s.send(str.encode(string))
-    except:
-        print("Ocorreu um erro, verifique se introduziu corretamente o numero do professor")
+    #except:
+    #    print("Ocorreu um erro, verifique se introduziu corretamente o numero do professor")
     pass
   
 def ImportarFicheiroAlunos():
@@ -275,6 +290,7 @@ def ImportarFicheiroAlunos():
         if encontrou == 0:
             print("A disciplina não existe.")
         else:
+            print("Alunos inscritos na disciplina:")
             for linha in f:
                 aluno = int(linha)
                 print(aluno)
@@ -289,7 +305,6 @@ def ImportarFicheiroAlunos():
                 string = str(lista_aux)
                 s.send(str.encode("5"))
                 time.sleep(2)
-                print(string)
                 s.send(str.encode(string))
                 time.sleep(2)
 
@@ -356,63 +371,62 @@ while escolha !=0:
               print("11 - Importar alunos de um ficheiro")
               
               print("0 -Sair")
-              try:
-                  escolha = int(input("escolha: "))
-                  if escolha == 1:
-                      os.system("cls")
-                      criarDisciplina()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 2:
-                      os.system("cls")
-                      listarDisciplina()
-                      input("Pressione uma tecla para voltar ao menu. ")
-                      os.system("cls")
-                  if escolha == 3:
-                      os.system("cls")
-                      eliminarDisciplina()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 4:
-                      os.system("cls")
-                      criarAluno()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 5:
-                      os.system("cls")
-                      inscreverAluno()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 6:
-                      os.system("cls")
-                      eliminarAluno()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 7:
-                      os.system("cls")
-                      listarAluno()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 8:
-                      os.system("cls")
-                      listarAlunoDisciplina()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 9:
-                      os.system("cls")
-                      criarProfessor()
-                      os.system("cls")
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-                  if escolha == 10:
-                      os.system("cls")
-                      adicionarProfessorDisciplina()
-                      input("Pressione uma tecla para voltar ao menu. ")
-                      os.system("cls")
-                  if escolha == 11:
-                      os.system("cls")
-                      ImportarFicheiroAlunos()
-                      input("Pressione uma tecla para voltar ao menu.")
-                      os.system("cls")
-              except:
-                    print("Ocorreu um erro, verifique se introduziu a opção correta")
+              #try:
+              escolha = int(input("escolha: "))
+              if escolha == 1:
+                  os.system("cls")
+                  criarDisciplina()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 2:
+                  os.system("cls")
+                  listarDisciplina()
+                  input("Pressione uma tecla para voltar ao menu. ")
+                  os.system("cls")
+              if escolha == 3:
+                  os.system("cls")
+                  eliminarDisciplina()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 4:
+                  os.system("cls")
+                  criarAluno()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 5:
+                  os.system("cls")
+                  inscreverAluno()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 6:
+                  os.system("cls")
+                  eliminarAluno()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 7:
+                  os.system("cls")
+                  listarAluno()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 8:
+                  os.system("cls")
+                  listarAlunoDisciplina()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 9:
+                  os.system("cls")
+                  criarProfessor()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              if escolha == 10:
+                  os.system("cls")
+                  adicionarProfessorDisciplina()
+                  input("Pressione uma tecla para voltar ao menu. ")
+                  os.system("cls")
+              if escolha == 11:
+                  os.system("cls")
+                  ImportarFicheiroAlunos()
+                  input("Pressione uma tecla para voltar ao menu.")
+                  os.system("cls")
+              #except:
+              #      print("Ocorreu um erro, verifique se introduziu a opção correta")
